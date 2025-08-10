@@ -40,11 +40,7 @@ impl ArbitrageService {
         );
         info!("Connected to Base RPC");
         
-        let cex_client = Arc::new(create_cex_client(
-            &config.cex.provider,
-            config.cex.api_key.clone(),
-            config.cex.api_secret.clone(),
-        ));
+        let cex_client: Arc<dyn CexClient> = Arc::from(create_cex_client(&config.cex.provider));
         info!("CEX client initialized");
         
         let uniswap_client = Arc::new(
