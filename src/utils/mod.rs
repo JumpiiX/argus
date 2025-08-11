@@ -29,7 +29,7 @@ pub fn sqrt_price_x96_to_price(sqrt_price_x96: u128, decimals0: u8, decimals1: u
     let price_str = (price_x96 / &q96).to_string();
     
     let price = Decimal::from_str(&price_str)
-        .map_err(|e| ArgusError::CalculationError(format!("Failed to parse price: {}", e)))?;
+        .map_err(|e| ArgusError::CalculationError(format!("Failed to parse price: {e}")))?;
     
     if decimals1 > decimals0 {
         Ok(price * Decimal::from(decimal_adjustment))
@@ -53,7 +53,7 @@ pub fn calculate_price_impact(
 
 pub fn format_address(address: &str) -> Result<String> {
     if !address.starts_with("0x") || address.len() != 42 {
-        return Err(ArgusError::ConfigError(format!("Invalid address format: {}", address)));
+        return Err(ArgusError::ConfigError(format!("Invalid address format: {address}")));
     }
     Ok(address.to_lowercase())
 }

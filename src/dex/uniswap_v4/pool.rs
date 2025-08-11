@@ -26,7 +26,7 @@ pub struct UniswapV4Client {
 impl UniswapV4Client {
     pub async fn new(rpc: Arc<RpcClient>) -> Result<Self> {
         let state_view = Address::from_str(super::STATE_VIEW_ADDRESS)
-            .map_err(|e| ArgusError::ContractError(format!("Invalid StateView address: {}", e)))?;
+            .map_err(|e| ArgusError::ContractError(format!("Invalid StateView address: {e}")))?;
         
         let pool_key = PoolKey::new_weth_usdc();
         
@@ -64,7 +64,7 @@ impl UniswapV4Client {
             .data(ethers::types::Bytes::from(call_data));
         
         let result = provider.call(&tx.into(), None).await
-            .map_err(|e| ArgusError::ContractError(format!("Failed to call getSlot0: {}", e)))?;
+            .map_err(|e| ArgusError::ContractError(format!("Failed to call getSlot0: {e}")))?;
         
         if result.len() < 128 {
             return Err(ArgusError::ContractError("Invalid slot0 response".to_string()));
@@ -114,7 +114,7 @@ impl UniswapV4Client {
             .data(ethers::types::Bytes::from(call_data));
         
         let result = provider.call(&tx.into(), None).await
-            .map_err(|e| ArgusError::ContractError(format!("Failed to call getLiquidity: {}", e)))?;
+            .map_err(|e| ArgusError::ContractError(format!("Failed to call getLiquidity: {e}")))?;
         
         if result.len() < 32 {
             return Err(ArgusError::ContractError("Invalid liquidity response".to_string()));

@@ -162,7 +162,7 @@ impl ArbitrageService {
         let cost_wei: ethers::types::U256 = gas_with_buffer * gas_price_wei;
         
         let cost_eth = Decimal::from_str(&cost_wei.to_string())
-            .map_err(|e| crate::models::ArgusError::CalculationError(format!("U256 conversion error: {}", e)))?
+            .map_err(|e| crate::models::ArgusError::CalculationError(format!("U256 conversion error: {e}")))?
             / Decimal::from_str("1000000000000000000").unwrap();
         
         let cost_usd = cost_eth * eth_price_usd;
@@ -198,7 +198,7 @@ impl ArbitrageService {
         let total_cost_wei: ethers::types::U256 = l2_cost_wei + l1_data_fee_wei;
         
         let total_cost_eth = Decimal::from_str(&total_cost_wei.to_string())
-            .map_err(|e| crate::models::ArgusError::CalculationError(format!("U256 conversion error: {}", e)))?
+            .map_err(|e| crate::models::ArgusError::CalculationError(format!("U256 conversion error: {e}")))?
             / Decimal::from_str("1000000000000000000").unwrap();
         
         let l2_cost_eth = Decimal::from_str(&l2_cost_wei.to_string()).unwrap()

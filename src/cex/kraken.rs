@@ -45,7 +45,7 @@ impl KrakenClient {
         } else { 
             quote.to_uppercase()
         };
-        format!("{}{}", base_formatted, quote_formatted)
+        format!("{base_formatted}{quote_formatted}")
     }
 }
 
@@ -53,7 +53,7 @@ impl KrakenClient {
 impl CexClient for KrakenClient {
     async fn get_spot_price(&self, base: &str, quote: &str) -> Result<CexPrice> {
         let pair = Self::format_pair(base, quote);
-        let url = format!("https://api.kraken.com/0/public/Ticker?pair={}", pair);
+        let url = format!("https://api.kraken.com/0/public/Ticker?pair={pair}");
         
         let response = self.client
             .get(&url)
@@ -61,7 +61,7 @@ impl CexClient for KrakenClient {
             .await?
             .json::<KrakenResponse>()
             .await
-            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse Kraken response: {}", e)))?;
+            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse Kraken response: {e}")))?;
         
         if !response.error.is_empty() {
             return Err(ArgusError::CexApiError(format!("Kraken API error: {:?}", response.error)));
@@ -77,7 +77,7 @@ impl CexClient for KrakenClient {
             .ok_or_else(|| ArgusError::CexApiError("No price data found".to_string()))?;
         
         let price = Decimal::from_str(price_str)
-            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse price: {}", e)))?;
+            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse price: {e}")))?;
         
         Ok(CexPrice {
             exchange: "Kraken".to_string(),

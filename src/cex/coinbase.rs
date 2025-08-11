@@ -44,7 +44,7 @@ impl CexClient for CoinbaseClient {
             .ok_or_else(|| ArgusError::CexApiError("Failed to parse Coinbase response".to_string()))?;
         
         let price = Decimal::from_str(rate_str)
-            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse price: {}", e)))?;
+            .map_err(|e| ArgusError::CexApiError(format!("Failed to parse price: {e}")))?;
         
         Ok(CexPrice {
             exchange: "Coinbase".to_string(),

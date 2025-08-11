@@ -60,7 +60,7 @@ impl ArbitrageAnalyzer {
     
     pub fn wei_to_usd(&self, wei: u64) -> Result<Decimal> {
         let eth_amount = Decimal::from(wei) / Decimal::from_str("1000000000000000000")
-            .map_err(|e| ArgusError::CalculationError(format!("Failed to convert wei: {}", e)))?;
+            .map_err(|e| ArgusError::CalculationError(format!("Failed to convert wei: {e}")))?;
         Ok(eth_amount * self.eth_price_usd)
     }
     

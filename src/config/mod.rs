@@ -57,7 +57,7 @@ impl Config {
                 port: env::var("SERVER_PORT")
                     .unwrap_or_else(|_| "8080".to_string())
                     .parse()
-                    .map_err(|e| ArgusError::ConfigError(format!("Invalid port: {}", e)))?,
+                    .map_err(|e| ArgusError::ConfigError(format!("Invalid port: {e}")))?,,
                 log_level: env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string()),
             },
             ethereum: ChainConfig {
@@ -93,7 +93,7 @@ impl std::str::FromStr for CexProvider {
             "coinbase" => Ok(CexProvider::Coinbase),
             "kraken" => Ok(CexProvider::Kraken),
             "binance" => Ok(CexProvider::Binance),
-            _ => Err(ArgusError::ConfigError(format!("Unknown CEX provider: {}", s))),
+            _ => Err(ArgusError::ConfigError(format!("Unknown CEX provider: {s}"))),
         }
     }
 }

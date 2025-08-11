@@ -25,22 +25,22 @@ pub async fn get_arbitrage_opportunity(
         Some(size) => Decimal::from_str(&size)
             .map_err(|e| rocket::response::status::Custom(
                 rocket::http::Status::BadRequest,
-                format!("Invalid trade size: {}", e)
+                format!("Invalid trade size: {e}")
             ))?,
         None => Decimal::from_str(&state.config.trading.default_trade_size_eth)
             .map_err(|e| rocket::response::status::Custom(
                 rocket::http::Status::InternalServerError,
-                format!("Invalid default trade size: {}", e)
+                format!("Invalid default trade size: {e}")
             ))?,
     };
     
     let service = state.arbitrage_service.read().await;
     let opportunity = service.check_arbitrage_opportunity(trade_size).await
         .map_err(|e| {
-            eprintln!("Error checking arbitrage opportunity: {:?}", e);
+            eprintln!("Error checking arbitrage opportunity: {e:?}");
             rocket::response::status::Custom(
                 rocket::http::Status::InternalServerError,
-                format!("Error checking arbitrage: {}", e)
+                format!("Error checking arbitrage: {e}")
             )
         })?;
     

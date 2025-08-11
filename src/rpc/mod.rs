@@ -15,10 +15,10 @@ pub struct RpcClient {
 impl RpcClient {
     pub async fn new(rpc_url: &str, chain_id: u64) -> Result<Self> {
         let provider = Provider::<Http>::try_from(rpc_url)
-            .map_err(|e| ArgusError::RpcError(format!("Failed to create provider: {}", e)))?;
+            .map_err(|e| ArgusError::RpcError(format!("Failed to create provider: {e}")))?;
         
         let chain = provider.get_chainid().await
-            .map_err(|e| ArgusError::RpcError(format!("Failed to get chain ID: {}", e)))?;
+            .map_err(|e| ArgusError::RpcError(format!("Failed to get chain ID: {e}")))?;
         
         if chain.as_u64() != chain_id {
             return Err(ArgusError::RpcError(
@@ -42,7 +42,7 @@ impl RpcClient {
     
     pub async fn get_gas_price(&self) -> Result<u64> {
         let gas_price = self.provider.get_gas_price().await
-            .map_err(|e| ArgusError::RpcError(format!("Failed to get gas price: {}", e)))?;
+            .map_err(|e| ArgusError::RpcError(format!("Failed to get gas price: {e}")))?;
         
         Ok(gas_price.as_u64())
     }
@@ -78,7 +78,7 @@ impl RpcClient {
     
     pub async fn get_latest_block(&self) -> Result<Block<H256>> {
         let block = self.provider.get_block(ethers::types::BlockNumber::Latest).await
-            .map_err(|e| ArgusError::RpcError(format!("Failed to get latest block: {}", e)))?
+            .map_err(|e| ArgusError::RpcError(format!("Failed to get latest block: {e}")))?,
             .ok_or_else(|| ArgusError::RpcError("Latest block not found".to_string()))?;
         Ok(block)
     }
@@ -89,7 +89,7 @@ impl RpcClient {
             "eth_maxPriorityFeePerGas", 
             ()
         ).await
-        .map_err(|e| ArgusError::RpcError(format!("Cannot get priority fee from RPC: {}", e)))?;
+        .map_err(|e| ArgusError::RpcError(format!("Cannot get priority fee from RPC: {e}")))?;
         
         Ok(priority_fee.as_u64())
     }
@@ -122,7 +122,7 @@ impl RpcClient {
             .data(Bytes::from(call_data));
         
         let result = self.provider.call(&tx.into(), None).await
-            .map_err(|e| ArgusError::RpcError(format!("Failed to get L1 fee from oracle: {}", e)))?;
+            .map_err(|e| ArgusError::RpcError(format!("Failed to get L1 fee from oracle: {e}")))?;
         
         if result.len() < 32 {
             return Err(ArgusError::RpcError("Invalid L1 fee response from oracle".to_string()));
