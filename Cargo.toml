@@ -1,0 +1,63 @@
+[package]
+name = "argus"
+version = "0.1.0"
+edition = "2021"
+authors = ["Arrakis Finance"]
+description = "Arbitrage monitoring service for WETH/USDC across multiple venues"
+
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.40", features = ["full"] }
+
+# Web framework
+rocket = { version = "0.5", features = ["json"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Ethereum interaction
+ethers = { version = "2.0", features = ["ws", "rustls"] }
+ethers-core = "2.0"
+ethers-providers = "2.0"
+ethers-contract = "2.0"
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Configuration
+config = "0.14"
+dotenv = "0.15"
+
+# Numerical operations
+rust_decimal = "1.36"
+num-bigint = "0.4"
+num-traits = "0.2"
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Metrics
+prometheus = "0.13"
+
+# Async traits
+async-trait = "0.1"
+
+[dev-dependencies]
+mockito = "1.5"
+tokio-test = "0.4"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
