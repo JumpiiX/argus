@@ -22,6 +22,7 @@ impl Default for CoinbaseClient {
 }
 
 impl CoinbaseClient {
+    #[must_use]
     pub fn new() -> Self {
         Self {
             client: Client::new(),

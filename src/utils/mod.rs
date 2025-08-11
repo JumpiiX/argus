@@ -38,6 +38,7 @@ pub fn sqrt_price_x96_to_price(sqrt_price_x96: u128, decimals0: u8, decimals1: u
     }
 }
 
+#[must_use]
 pub fn calculate_price_impact(
     amount_in: Decimal,
     amount_out: Decimal,

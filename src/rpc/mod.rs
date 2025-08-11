@@ -32,10 +32,12 @@ impl RpcClient {
         })
     }
     
+    #[must_use]
     pub fn provider(&self) -> Arc<Provider<Http>> {
         self.provider.clone()
     }
     
+    #[must_use]
     pub fn chain_id(&self) -> u64 {
         self.chain_id
     }

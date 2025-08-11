@@ -15,6 +15,7 @@ pub struct PoolKey {
 }
 
 impl PoolKey {
+    #[must_use]
     pub fn new_weth_usdc() -> Self {
         // IMPORTANT: Uniswap V4 supports native ETH directly (first version to do so!)
         // This saves ~40,000 gas per swap compared to V3 which requires WETH wrapping
@@ -33,6 +34,7 @@ impl PoolKey {
         }
     }
     
+    #[must_use]
     pub fn to_id(&self) -> [u8; 32] {
         use ethers::utils::keccak256;
         use ethers::abi::encode;

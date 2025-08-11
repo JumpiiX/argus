@@ -34,6 +34,7 @@ impl Default for KrakenClient {
 }
 
 impl KrakenClient {
+    #[must_use]
     pub fn new() -> Self {
         Self {
             client: Client::new(),

@@ -47,6 +47,7 @@ pub async fn get_arbitrage_opportunity(
     Ok(Json(opportunity))
 }
 
+#[must_use]
 pub fn create_rocket(state: ApiState) -> rocket::Rocket<rocket::Build> {
     rocket::build()
         .manage(state)

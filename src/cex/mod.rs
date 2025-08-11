@@ -19,6 +19,7 @@ pub trait CexClient: Send + Sync {
     async fn get_spot_price(&self, base: &str, quote: &str) -> Result<CexPrice>;
 }
 
+#[must_use]
 pub fn create_cex_client(provider: &CexProvider) -> Box<dyn CexClient> {
     match provider {
         CexProvider::Coinbase => Box::new(CoinbaseClient::new()),

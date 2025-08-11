@@ -27,6 +27,7 @@ impl Default for BinanceClient {
 }
 
 impl BinanceClient {
+    #[must_use]
     pub fn new() -> Self {
         Self {
             client: Client::new(),

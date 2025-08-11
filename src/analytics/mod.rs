@@ -21,6 +21,7 @@ impl Default for ArbitrageAnalyzer {
 }
 
 impl ArbitrageAnalyzer {
+    #[must_use]
     pub fn new() -> Self {
         Self {
             eth_price_usd: Decimal::ZERO,
@@ -70,6 +71,7 @@ impl ArbitrageAnalyzer {
         Ok(eth_amount * self.eth_price_usd)
     }
     
+    #[must_use]
     pub fn create_dex_details(&self, quote: &SwapQuote, gas_cost_usd: Decimal) -> DexDetails {
         DexDetails {
             effective_price_usd: quote.effective_price,
