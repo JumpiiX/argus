@@ -167,6 +167,7 @@ impl ArbitrageService {
         
         let cost_usd = cost_eth * eth_price_usd;
         
+        #[allow(clippy::cast_precision_loss)]
         info!("ETH swap: raw_gas={}, buffered_gas={}, gas_price={:.3} gwei, cost=${:.4}", 
               gas_estimate_raw, gas_with_buffer, gas_price_wei.as_u128() as f64 / 1e9, cost_usd);
         
@@ -208,6 +209,7 @@ impl ArbitrageService {
         
         let total_cost_usd = total_cost_eth * eth_price_usd;
         
+        #[allow(clippy::cast_precision_loss)]
         info!("Base swap: l2_raw_gas={}, l2_buffered={}, l2_price={:.3} gwei, l2_cost={:.6} ETH, l1_fee={:.6} ETH, total=${:.4}", 
               l2_gas_estimate_raw, l2_gas_with_buffer, l2_gas_price_wei.as_u128() as f64 / 1e9, 
               l2_cost_eth, l1_data_fee_eth, total_cost_usd);

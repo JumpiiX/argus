@@ -66,6 +66,7 @@ impl DexClient for AerodromeClient {
     async fn get_pool_state(&self) -> Result<PoolState> {
         let (reserve0, reserve1) = self.get_reserves().await?;
         
+        #[allow(clippy::cast_precision_loss, clippy::cast_possible_truncation, clippy::cast_sign_loss)]
         let sqrt_price = ((reserve1 as f64 / reserve0 as f64).sqrt() * (1u128 << 96) as f64) as u128;
         
         Ok(PoolState {

@@ -51,6 +51,7 @@ impl RpcClient {
     
     pub async fn get_gas_price_gwei(&self) -> Result<f64> {
         let gas_price = self.get_gas_price().await?;
+        #[allow(clippy::cast_precision_loss)]
         Ok(gas_price as f64 / 1_000_000_000.0)
     }
     

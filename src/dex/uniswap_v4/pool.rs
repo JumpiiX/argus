@@ -79,22 +79,23 @@ impl UniswapV4Client {
         let sqrt_price_u128 = sqrt_price.as_u128();
 
         let tick_i32 = if tick_bytes[29] >= 0x80 {
-            let val = ((tick_bytes[29] as i32) << 16) | 
-                     ((tick_bytes[30] as i32) << 8) | 
-                     (tick_bytes[31] as i32);
+            let val = (i32::from(tick_bytes[29]) << 16) | 
+                     (i32::from(tick_bytes[30]) << 8) | 
+                     i32::from(tick_bytes[31]);
+            #[allow(clippy::cast_possible_wrap)]
             val | 0xFF00_0000_u32 as i32
         } else {
-            ((tick_bytes[29] as i32) << 16) | 
-            ((tick_bytes[30] as i32) << 8) | 
-            (tick_bytes[31] as i32)
+            (i32::from(tick_bytes[29]) << 16) | 
+            (i32::from(tick_bytes[30]) << 8) | 
+            i32::from(tick_bytes[31])
         };
 
-        let protocol_fee_u32 = ((protocol_fee_bytes[29] as u32) << 16) | 
-                               ((protocol_fee_bytes[30] as u32) << 8) | 
-                               (protocol_fee_bytes[31] as u32);
-        let lp_fee_u32 = ((lp_fee_bytes[29] as u32) << 16) | 
-                        ((lp_fee_bytes[30] as u32) << 8) | 
-                        (lp_fee_bytes[31] as u32);
+        let protocol_fee_u32 = (u32::from(protocol_fee_bytes[29]) << 16) | 
+                               (u32::from(protocol_fee_bytes[30]) << 8) | 
+                               u32::from(protocol_fee_bytes[31]);
+        let lp_fee_u32 = (u32::from(lp_fee_bytes[29]) << 16) | 
+                        (u32::from(lp_fee_bytes[30]) << 8) | 
+                        u32::from(lp_fee_bytes[31]);
         
         Ok((sqrt_price_u128, tick_i32, protocol_fee_u32, lp_fee_u32))
     }
@@ -134,6 +135,7 @@ impl DexClient for UniswapV4Client {
     async fn calculate_swap_output(&self, amount_in: Decimal, zero_for_one: bool) -> Result<SwapQuote> {
         let pool_state = self.get_pool_state().await?;
 
+        #[allow(clippy::cast_precision_loss)]
         let sqrt_price_f64 = pool_state.sqrt_price_x96 as f64 / (1u128 << 96) as f64;
         let spot_price_raw = sqrt_price_f64 * sqrt_price_f64;
 

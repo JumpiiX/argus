@@ -22,9 +22,9 @@ pub fn sqrt_price_x96_to_price(sqrt_price_x96: u128, decimals0: u8, decimals1: u
     }
     
     let decimal_adjustment = if decimals1 >= decimals0 {
-        10_i32.pow((decimals1 - decimals0) as u32)
+        10_i32.pow(u32::from(decimals1 - decimals0))
     } else {
-        10_i32.pow((decimals0 - decimals1) as u32)
+        10_i32.pow(u32::from(decimals0 - decimals1))
     };
     let price_str = (price_x96 / &q96).to_string();
     
