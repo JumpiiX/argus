@@ -20,6 +20,12 @@ struct BinanceTickerResponse {
     price: String,
 }
 
+impl Default for BinanceClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BinanceClient {
     pub fn new() -> Self {
         Self {

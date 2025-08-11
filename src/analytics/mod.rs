@@ -14,6 +14,12 @@ pub struct ArbitrageAnalyzer {
     eth_price_usd: Decimal,
 }
 
+impl Default for ArbitrageAnalyzer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ArbitrageAnalyzer {
     pub fn new() -> Self {
         Self {

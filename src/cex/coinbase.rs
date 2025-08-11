@@ -15,6 +15,12 @@ pub struct CoinbaseClient {
 }
 
 
+impl Default for CoinbaseClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CoinbaseClient {
     pub fn new() -> Self {
         Self {

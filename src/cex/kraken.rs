@@ -27,6 +27,12 @@ struct KrakenTicker {
     c: Vec<String>,
 }
 
+impl Default for KrakenClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl KrakenClient {
     pub fn new() -> Self {
         Self {
