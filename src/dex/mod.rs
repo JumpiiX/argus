@@ -2,17 +2,21 @@
  * DEX integration module for Uniswap V4 and Aerodrome
  */
 
-pub mod uniswap_v4;
 pub mod aerodrome;
+pub mod uniswap_v4;
 
+use crate::models::Result;
 use async_trait::async_trait;
 use rust_decimal::Decimal;
-use crate::models::Result;
 
 #[async_trait]
 pub trait DexClient: Send + Sync {
     async fn get_pool_state(&self) -> Result<PoolState>;
-    async fn calculate_swap_output(&self, amount_in: Decimal, zero_for_one: bool) -> Result<SwapQuote>;
+    async fn calculate_swap_output(
+        &self,
+        amount_in: Decimal,
+        zero_for_one: bool,
+    ) -> Result<SwapQuote>;
     async fn estimate_gas(&self) -> Result<u64>;
 }
 
