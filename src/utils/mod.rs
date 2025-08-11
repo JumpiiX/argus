@@ -56,7 +56,7 @@ pub fn calculate_price_impact(
     if expected_out == Decimal::ZERO {
         return Decimal::ZERO;
     }
-    (expected_out - amount_out) / expected_out * Decimal::from(100)
+    -((expected_out - amount_out) / expected_out * Decimal::from(100))
 }
 
 pub fn format_address(address: &str) -> Result<String> {
