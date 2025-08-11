@@ -152,7 +152,10 @@ impl DexClient for UniswapV4Client {
         let sqrt_price_f64 = pool_state.sqrt_price_x96 as f64 / (1u128 << 96) as f64;
         let spot_price_raw = sqrt_price_f64 * sqrt_price_f64;
 
-        let spot_price = Decimal::try_from(spot_price_raw * 1e12).unwrap_or(Decimal::from(3000));
+        let spot_price = Decimal::try_from(spot_price_raw * 1e12).map_err(|e| {
+            tracing::error!("Failed to convert Uniswap V4 spot price {}: {}", spot_price_raw, e);
+            crate::models::ArgusError::CalculationError(format!("Failed to convert spot price: {e}"))
+        })?;
 
         let price_impact_percent = if amount_in > Decimal::ZERO {
             -((amount_in / Decimal::from(10)) * Decimal::from_str("0.001").unwrap())
