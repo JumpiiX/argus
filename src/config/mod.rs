@@ -2,9 +2,9 @@
  * Configuration management for the Argus service
  */
 
+use crate::models::{ArgusError, Result};
 use serde::{Deserialize, Serialize};
 use std::env;
-use crate::models::{ArgusError, Result};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Config {
@@ -50,7 +50,7 @@ pub struct TradingConfig {
 impl Config {
     pub fn from_env() -> Result<Self> {
         dotenv::dotenv().ok();
-        
+
         Ok(Config {
             server: ServerConfig {
                 host: env::var("SERVER_HOST").unwrap_or_else(|_| "0.0.0.0".to_string()),
@@ -64,13 +64,13 @@ impl Config {
                 rpc_url: env::var("ETHEREUM_RPC_URL")
                     .map_err(|_| ArgusError::ConfigError("ETHEREUM_RPC_URL not set".to_string()))?,
                 chain_id: 1,
-                gas_price_multiplier: 1.1,  // Hardcoded 10% buffer
+                gas_price_multiplier: 1.1, // Hardcoded 10% buffer
             },
             base: ChainConfig {
                 rpc_url: env::var("BASE_RPC_URL")
                     .map_err(|_| ArgusError::ConfigError("BASE_RPC_URL not set".to_string()))?,
                 chain_id: 8453,
-                gas_price_multiplier: 1.1,  // Hardcoded 10% buffer
+                gas_price_multiplier: 1.1, // Hardcoded 10% buffer
             },
             cex: CexConfig {
                 provider: env::var("CEX_PROVIDER")
@@ -87,13 +87,15 @@ impl Config {
 
 impl std::str::FromStr for CexProvider {
     type Err = ArgusError;
-    
+
     fn from_str(s: &str) -> Result<Self> {
         match s.to_lowercase().as_str() {
             "coinbase" => Ok(CexProvider::Coinbase),
             "kraken" => Ok(CexProvider::Kraken),
             "binance" => Ok(CexProvider::Binance),
-            _ => Err(ArgusError::ConfigError(format!("Unknown CEX provider: {s}"))),
+            _ => Err(ArgusError::ConfigError(format!(
+                "Unknown CEX provider: {s}"
+            ))),
         }
     }
 }
