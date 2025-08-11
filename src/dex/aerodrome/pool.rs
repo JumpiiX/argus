@@ -20,7 +20,7 @@ pub struct AerodromeClient {
 }
 
 impl AerodromeClient {
-    pub async fn new(rpc: Arc<RpcClient>) -> Result<Self> {
+    pub fn new(rpc: Arc<RpcClient>) -> Result<Self> {
         let pool_address = Address::from_str(super::POOL_ADDRESS)
             .map_err(|e| ArgusError::ContractError(format!("Invalid pool address: {e}")))?;
         
@@ -91,7 +91,7 @@ impl DexClient for AerodromeClient {
             (reserve1, reserve0)
         };
         
-        let amount_out = self.get_amount_out(amount_in_wei, reserve_in, reserve_out)?;
+        let amount_out = Self::get_amount_out(amount_in_wei, reserve_in, reserve_out)?;
         
         let amount_out_decimal = Decimal::from(amount_out) / Decimal::from_str("1000000")
             .map_err(|e| ArgusError::CalculationError(format!("Decimal conversion error: {e}")))?;
@@ -120,7 +120,7 @@ impl DexClient for AerodromeClient {
 }
 
 impl AerodromeClient {
-    fn get_amount_out(&self, amount_in: u128, reserve_in: u128, reserve_out: u128) -> Result<u128> {
+    fn get_amount_out(amount_in: u128, reserve_in: u128, reserve_out: u128) -> Result<u128> {
         if reserve_in == 0 || reserve_out == 0 {
             return Err(ArgusError::CalculationError("Insufficient liquidity".to_string()));
         }

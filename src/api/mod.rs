@@ -55,6 +55,6 @@ pub fn create_rocket(state: ApiState) -> rocket::Rocket<rocket::Build> {
 }
 
 #[get("/health")]
-pub async fn health_check() -> &'static str {
+pub fn health_check() -> &'static str {
     "OK"
 }

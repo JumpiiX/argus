@@ -44,12 +44,12 @@ impl ArbitrageService {
         info!("CEX client initialized");
         
         let uniswap_client = Arc::new(
-            crate::dex::uniswap_v4::UniswapV4Client::new(eth_rpc.clone()).await?
+            crate::dex::uniswap_v4::UniswapV4Client::new(eth_rpc.clone())?
         );
         info!("Uniswap V4 client initialized");
         
         let aerodrome_client = Arc::new(
-            crate::dex::aerodrome::AerodromeClient::new(base_rpc.clone()).await?
+            crate::dex::aerodrome::AerodromeClient::new(base_rpc.clone())?
         );
         info!("Aerodrome client initialized");
         
@@ -74,8 +74,8 @@ impl ArbitrageService {
         
         self.analyzer.lock().unwrap().update_eth_price(cex_price.price);
         
-        let uniswap_swap_calldata = self.build_uniswap_swap_calldata(trade_size_eth);
-        let aerodrome_swap_calldata = self.build_aerodrome_swap_calldata(trade_size_eth);
+        let uniswap_swap_calldata = Self::build_uniswap_swap_calldata(trade_size_eth);
+        let aerodrome_swap_calldata = Self::build_aerodrome_swap_calldata(trade_size_eth);
         
         let eth_gas_cost_usd = self.estimate_gas_usd_eth_swap(
             uniswap_swap_calldata.clone(),
@@ -126,7 +126,7 @@ impl ArbitrageService {
         self.aerodrome_client.calculate_swap_output(amount_eth, true).await
     }
     
-    fn build_uniswap_swap_calldata(&self, _trade_size_eth: Decimal) -> Vec<u8> {
+    fn build_uniswap_swap_calldata(_trade_size_eth: Decimal) -> Vec<u8> {
         
         let mut calldata = Vec::new();
         calldata.extend_from_slice(&[0x12, 0x34, 0x56, 0x78]);
@@ -135,7 +135,7 @@ impl ArbitrageService {
         calldata
     }
     
-    fn build_aerodrome_swap_calldata(&self, _trade_size_eth: Decimal) -> Vec<u8> {
+    fn build_aerodrome_swap_calldata(_trade_size_eth: Decimal) -> Vec<u8> {
         
         let mut calldata = Vec::new();
         calldata.extend_from_slice(&[0x87, 0x65, 0x43, 0x21]);
@@ -155,7 +155,7 @@ impl ArbitrageService {
         
         let gas_price_wei = base_fee_per_gas + priority_fee;
 
-        let gas_estimate_raw = self.eth_rpc.get_typical_swap_gas().await?;
+        let gas_estimate_raw = self.eth_rpc.get_typical_swap_gas()?;
         
         let gas_with_buffer = ethers::types::U256::from(gas_estimate_raw) * 110 / 100;
         
@@ -185,7 +185,7 @@ impl ArbitrageService {
 
         let l2_gas_price_wei = base_fee_per_gas + priority_fee;
 
-        let l2_gas_estimate_raw = self.base_rpc.get_typical_swap_gas().await?;
+        let l2_gas_estimate_raw = self.base_rpc.get_typical_swap_gas()?;
         
         let l2_gas_with_buffer = ethers::types::U256::from(l2_gas_estimate_raw) * 110 / 100;
         

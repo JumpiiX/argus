@@ -60,7 +60,7 @@ impl RpcClient {
         Ok(gas_price * gas_units)
     }
     
-    pub async fn get_typical_swap_gas(&self) -> Result<u64> {
+    pub fn get_typical_swap_gas(&self) -> Result<u64> {
         // Return typical gas units for DEX swaps on each chain
         // These are well-documented values from mainnet observations
         // We use real-time gas prices with these typical units

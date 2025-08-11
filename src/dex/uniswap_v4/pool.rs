@@ -24,7 +24,7 @@ pub struct UniswapV4Client {
 }
 
 impl UniswapV4Client {
-    pub async fn new(rpc: Arc<RpcClient>) -> Result<Self> {
+    pub fn new(rpc: Arc<RpcClient>) -> Result<Self> {
         let state_view = Address::from_str(super::STATE_VIEW_ADDRESS)
             .map_err(|e| ArgusError::ContractError(format!("Invalid StateView address: {e}")))?;
         
