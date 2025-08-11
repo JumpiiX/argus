@@ -2,14 +2,14 @@
  * REST API module for the arbitrage monitoring service
  */
 
-use rocket::{State, get, routes};
+use crate::config::Config;
+use crate::models::ArbitrageOpportunity;
 use rocket::serde::json::Json;
+use rocket::{get, routes, State};
 use rust_decimal::Decimal;
 use std::str::FromStr;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use crate::models::ArbitrageOpportunity;
-use crate::config::Config;
 
 pub struct ApiState {
     pub config: Config,
@@ -22,28 +22,32 @@ pub async fn get_arbitrage_opportunity(
     state: &State<ApiState>,
 ) -> std::result::Result<Json<ArbitrageOpportunity>, rocket::response::status::Custom<String>> {
     let trade_size = match trade_size_eth {
-        Some(size) => Decimal::from_str(&size)
-            .map_err(|e| rocket::response::status::Custom(
+        Some(size) => Decimal::from_str(&size).map_err(|e| {
+            rocket::response::status::Custom(
                 rocket::http::Status::BadRequest,
-                format!("Invalid trade size: {e}")
-            ))?,
-        None => Decimal::from_str(&state.config.trading.default_trade_size_eth)
-            .map_err(|e| rocket::response::status::Custom(
+                format!("Invalid trade size: {e}"),
+            )
+        })?,
+        None => Decimal::from_str(&state.config.trading.default_trade_size_eth).map_err(|e| {
+            rocket::response::status::Custom(
                 rocket::http::Status::InternalServerError,
-                format!("Invalid default trade size: {e}")
-            ))?,
+                format!("Invalid default trade size: {e}"),
+            )
+        })?,
     };
-    
+
     let service = state.arbitrage_service.read().await;
-    let opportunity = service.check_arbitrage_opportunity(trade_size).await
+    let opportunity = service
+        .check_arbitrage_opportunity(trade_size)
+        .await
         .map_err(|e| {
             eprintln!("Error checking arbitrage opportunity: {e:?}");
             rocket::response::status::Custom(
                 rocket::http::Status::InternalServerError,
-                format!("Error checking arbitrage: {e}")
+                format!("Error checking arbitrage: {e}"),
             )
         })?;
-    
+
     Ok(Json(opportunity))
 }
 
