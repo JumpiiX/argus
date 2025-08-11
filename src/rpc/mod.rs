@@ -114,12 +114,12 @@ impl RpcClient {
             ethers::abi::Token::Bytes(tx_bytes)
         ]);
         
-        let mut call_data = Vec::from(get_l1_fee_selector);
-        call_data.extend_from_slice(&encoded_params);
+        let mut oracle_call_data = Vec::from(get_l1_fee_selector);
+        oracle_call_data.extend_from_slice(&encoded_params);
         
         let tx = ethers::types::TransactionRequest::new()
             .to(oracle_address)
-            .data(Bytes::from(call_data));
+            .data(Bytes::from(oracle_call_data));
         
         let result = self.provider.call(&tx.into(), None).await
             .map_err(|e| ArgusError::RpcError(format!("Failed to get L1 fee from oracle: {e}")))?;
