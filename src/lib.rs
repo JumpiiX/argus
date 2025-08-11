@@ -5,8 +5,8 @@
 
 #![allow(clippy::missing_errors_doc, clippy::missing_panics_doc)]
 
-pub mod api;
 pub mod analytics;
+pub mod api;
 pub mod cex;
 pub mod config;
 pub mod dex;
