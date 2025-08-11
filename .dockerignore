@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts
+target/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment files (will be mounted at runtime)
+.env
+.env.local
+.env.*.local
+
+# Documentation
+*.md
+docs/
+
+# Testing
+tests/
+benches/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# MacOS
+.DS_Store
+
+# Kubernetes
+*.yaml
+*.yml
+!Rocket.toml
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.log

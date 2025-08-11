@@ -134,8 +134,8 @@ That's it! The service is now running at `http://localhost:8080`
 # Format code
 cargo fmt
 
-# Lint
-cargo clippy
+# Lint (strict mode with pedantic checks)
+cargo clippy --all-targets --all-features --workspace -- -W clippy::pedantic -D warnings
 
 # Run tests
 cargo test

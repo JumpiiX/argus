@@ -82,7 +82,7 @@ impl UniswapV4Client {
             let val = ((tick_bytes[29] as i32) << 16) | 
                      ((tick_bytes[30] as i32) << 8) | 
                      (tick_bytes[31] as i32);
-            val | 0xFF000000u32 as i32
+            val | 0xFF00_0000_u32 as i32
         } else {
             ((tick_bytes[29] as i32) << 16) | 
             ((tick_bytes[30] as i32) << 8) | 
@@ -166,12 +166,12 @@ impl DexClient for UniswapV4Client {
             amount_out: amount_out_after_fee,
             effective_price,
             price_impact: price_impact_percent,
-            gas_estimate: 150000,
+            gas_estimate: 150_000,
         })
     }
     
     async fn estimate_gas(&self) -> Result<u64> {
-        Ok(150000)
+        Ok(150_000)
     }
 }
 
