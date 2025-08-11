@@ -83,8 +83,6 @@ curl "http://localhost:8080/api/v1/arbitrage-opportunity?trade_size_eth=1"
 ### 3. Run Locally (Development)
 
 ```bash
-# Install Rust if you haven't
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Clone and run
 git clone https://github.com/JumpiiX/argus
