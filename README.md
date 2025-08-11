@@ -49,11 +49,38 @@ ETHEREUM_RPC_URL=https://eth.llamarpc.com
 BASE_RPC_URL=https://base.llamarpc.com
 
 # Optional - Server configuration
-SERVER_PORT=8080
-CEX_PROVIDER=coinbase
+SERVER_PORT=8080                    # Port to run the API server (default: 8080)
+CEX_PROVIDER=coinbase               # CEX for reference price: coinbase, kraken, or binance (default: coinbase)
 ```
 
-### 2. Run Locally
+#### Environment Variables Reference
+
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `ETHEREUM_RPC_URL` | ✅ **Yes** | Ethereum Mainnet RPC endpoint | `https://eth.llamarpc.com` |
+| `BASE_RPC_URL` | ✅ **Yes** | Base Mainnet RPC endpoint | `https://base.llamarpc.com` |
+| `SERVER_PORT` | No | API server port | `8080` (default) |
+| `CEX_PROVIDER` | No | Centralized exchange for reference price | `coinbase` (default), `kraken`, `binance` |
+
+**Note**: No API keys are required! All endpoints use public APIs and RPC endpoints.
+
+### 2. Run with Docker (Recommended)
+
+```bash
+# Build the Docker image
+docker build -t argus:latest .
+
+# Run the container
+docker run -p 8080:8080 \
+  -e ETHEREUM_RPC_URL=https://eth.llamarpc.com \
+  -e BASE_RPC_URL=https://base.llamarpc.com \
+  argus:latest
+
+# Test the API (in another terminal)
+curl "http://localhost:8080/api/v1/arbitrage-opportunity?trade_size_eth=1"
+```
+
+### 3. Run Locally (Development)
 
 ```bash
 # Install Rust if you haven't
