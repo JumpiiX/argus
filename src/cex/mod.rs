@@ -2,17 +2,17 @@
  * CEX price fetcher module for getting reference prices
  */
 
+mod binance;
 mod coinbase;
 mod kraken;
-mod binance;
 
-use async_trait::async_trait;
 use crate::config::CexProvider;
 use crate::models::{CexPrice, Result};
+use async_trait::async_trait;
 
+pub use binance::BinanceClient;
 pub use coinbase::CoinbaseClient;
 pub use kraken::KrakenClient;
-pub use binance::BinanceClient;
 
 #[async_trait]
 pub trait CexClient: Send + Sync {
