@@ -3,6 +3,8 @@
  * Core library exports and module declarations
  */
 
+#![allow(clippy::missing_errors_doc, clippy::missing_panics_doc)]
+
 pub mod api;
 pub mod analytics;
 pub mod cex;
