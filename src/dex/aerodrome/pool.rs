@@ -122,7 +122,9 @@ impl DexClient for AerodromeClient {
         let effective_price = if amount_in > Decimal::ZERO {
             amount_out_decimal / amount_in
         } else {
-            tracing::error!("Attempted to calculate Aerodrome effective price with zero input amount");
+            tracing::error!(
+                "Attempted to calculate Aerodrome effective price with zero input amount"
+            );
             return Err(crate::models::ArgusError::CalculationError(
                 "Cannot calculate effective price with zero input amount".to_string(),
             ));
