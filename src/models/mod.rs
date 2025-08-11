@@ -51,25 +51,25 @@ pub struct CexPrice {
 pub enum ArgusError {
     #[error("RPC error: {0}")]
     RpcError(String),
-    
+
     #[error("CEX API error: {0}")]
     CexApiError(String),
-    
+
     #[error("Contract interaction error: {0}")]
     ContractError(String),
-    
+
     #[error("Calculation error: {0}")]
     CalculationError(String),
-    
+
     #[error("Configuration error: {0}")]
     ConfigError(String),
-    
+
     #[error("Network error: {0}")]
     NetworkError(#[from] reqwest::Error),
-    
+
     #[error("Serialization error: {0}")]
     SerializationError(#[from] serde_json::Error),
-    
+
     #[error("Unknown error: {0}")]
     Unknown(String),
 }
