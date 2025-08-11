@@ -268,6 +268,8 @@ Instead of weighing every package (which would require complex simulation), we u
 
 ### Why This Approach Makes Sense
 
+**Time Constraint Consideration**: Given the 72-hour challenge timeline, this approach strikes the perfect balance between implementation speed and accuracy. For a production system with more development time, we'd implement the more sophisticated approaches outlined in the Future Improvements section.
+
 **What We Do:**
 - Use typical gas consumption: 150,000 units for Uniswap V4, 80,000 for Aerodrome (like knowing a typical package weighs 10 pounds)
 - Fetch real-time gas prices from the blockchain (like checking current FedEx rates)
@@ -398,7 +400,6 @@ spec:
 ### Monitoring and Observability
 
 **Key Metrics I would track:**
-- Request latency percentiles (p50, p95, p99) to understand performance distribution
 - RPC call success/failure rates per endpoint to detect provider issues
 - Arbitrage opportunities detected per hour to measure effectiveness
 - Gas price trends on both chains for cost analysis
@@ -432,7 +433,6 @@ pub async fn metrics() -> String {
 - I would ensure containers run as non-root user (UID 1001) as already configured
 - I would enforce read-only root filesystem with explicit temp mounts
 - I would apply strict PodSecurityPolicies to prevent privilege escalation
-- I would integrate Trivy for regular vulnerability scanning of container images
 
 **Audit and Compliance strategy I would follow:**
 - I would enable Cloud Audit Logs for comprehensive API access tracking
@@ -456,10 +456,6 @@ pub async fn metrics() -> String {
 - I would use k6 to simulate realistic load patterns up to 1000 requests/second
 - I would verify that horizontal scaling triggers appropriately under load
 - I would monitor resource usage patterns to identify bottlenecks
-
-## Conclusion
-
-This project represented an fascinating intersection of blockchain technology, financial mathematics, and systems engineering. The challenge required deep research into two fundamentally different AMM architectures - Uniswap V4's revolutionary singleton pattern versus Aerodrome's battle-tested Solidly design.
 
 ## Future Improvements
 
@@ -489,14 +485,6 @@ eth_estimateGas(tx, "latest", state_overrides)
 - Parse the returned `gasEstimate` value
 - More accurate as it accounts for actual pool state and tick crossings
 **Challenge**: Requires handling revert-based return patterns
-
-#### 3. Multi-RPC Gas Aggregation
-**What it would do**: Query multiple RPC providers and aggregate estimates
-**Benefits**: 
-- Reduces dependency on single provider
-- Can detect outliers and use median values
-- Improves reliability
-**Implementation**: Parallel queries to Alchemy, Infura, QuickNode, etc.
 
 ## Conclusion - A Personal Reflection
 
