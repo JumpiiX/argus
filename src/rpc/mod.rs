@@ -81,7 +81,7 @@ impl RpcClient {
     
     pub async fn get_latest_block(&self) -> Result<Block<H256>> {
         let block = self.provider.get_block(ethers::types::BlockNumber::Latest).await
-            .map_err(|e| ArgusError::RpcError(format!("Failed to get latest block: {e}")))?,
+            .map_err(|e| ArgusError::RpcError(format!("Failed to get latest block: {e}")))?
             .ok_or_else(|| ArgusError::RpcError("Latest block not found".to_string()))?;
         Ok(block)
     }

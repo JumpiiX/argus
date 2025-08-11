@@ -83,7 +83,8 @@ impl UniswapV4Client {
                      (i32::from(tick_bytes[30]) << 8) | 
                      i32::from(tick_bytes[31]);
             #[allow(clippy::cast_possible_wrap)]
-            val | 0xFF00_0000_u32 as i32
+            let result = val | 0xFF00_0000_u32 as i32;
+            result
         } else {
             (i32::from(tick_bytes[29]) << 16) | 
             (i32::from(tick_bytes[30]) << 8) | 
