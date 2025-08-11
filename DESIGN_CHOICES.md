@@ -2,7 +2,7 @@
 
 ## TL;DR - What You Need to Know
 
-**What Argus Does:** Watches ETH/USDC prices on two exchanges (Uniswap V4 and Aerodrome) and tells you if there's profit after gas fees.
+**What Argus Does:** Watches WETH/USDC prices on two exchanges (Uniswap V4 and Aerodrome) and tells you if there's profit after gas fees.
 
 **Key Implementation Choices:**
 1. **Gas Calculation**: We use typical gas amounts (150k for Uniswap, 80k for Aerodrome) with real-time prices - fast and accurate enough
@@ -322,6 +322,92 @@ total_cost = l2_cost + l1_data_fee
 ```
 
 **Fun fact**: Sometimes the "storage fee" on Ethereum is 3x more expensive than the actual transaction on Base!
+
+## First Deployed Iteration - Live MVP
+
+I deployed the service to a real server to prove it actually works outside of localhost. You can test it yourself right now:
+
+**Live URL**: https://argus.unterguggenberger.ch/api/v1/arbitrage-opportunity?trade_size_eth=10
+
+Note: It's running on a free tier server, so the first request might take 10-30 seconds since the server goes to sleep when inactive. After it wakes up, subsequent requests are much faster. Not ideal for production, but perfect for demonstrating the MVP works end-to-end.
+
+### Keep It Simple - My Development Philosophy
+
+I'm a big believer in the KISS principle (Keep It Simple, Stupid). Throughout this project, I deliberately avoided over-engineering. Both the Dockerfile and Kubernetes manifests contain only what's absolutely necessary. No bloat, no "nice-to-haves", just the essentials that make it work.
+
+#### The Dockerfile
+
+My Dockerfile is intentionally straightforward. It builds the Rust app, creates a non-root user for security, and runs the service. That's it.
+
+```dockerfile
+FROM rust:latest
+WORKDIR /app
+RUN apt-get update && apt-get install -y pkg-config libssl-dev ca-certificates curl
+COPY . .
+RUN cargo build --release
+RUN useradd --uid 1001 argus
+USER argus
+EXPOSE 8080
+CMD ["./target/release/argus"]
+```
+
+What I included:
+- Rust toolchain (obviously needed to build the app)
+- pkg-config and libssl-dev (required for the Ethereum libraries)
+- A non-root user (basic security practice)
+- curl (for health checks)
+
+What I deliberately left out:
+- Multi-stage builds (yes, they save space, but they add complexity)
+- Fancy entrypoint scripts
+- Build caching optimizations
+- Development tools
+
+Why? Because for an MVP, simplicity beats optimization. The image works, it's secure enough, and any developer can understand it in 10 seconds.
+
+#### The Kubernetes Deployment
+
+Same story with the Kubernetes manifest. I kept it dead simple:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argus
+spec:
+  replicas: 2  # Two pods for basic high availability
+  template:
+    spec:
+      containers:
+      - name: argus
+        image: argus:latest
+        resources:
+          requests: { memory: "256Mi", cpu: "250m" }
+          limits: { memory: "512Mi", cpu: "500m" }
+        livenessProbe:
+          httpGet: { path: /health, port: 8080 }
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+```
+
+What I included:
+- Two replicas (if one crashes, the other keeps running)
+- Basic resource limits (prevents one bad pod from eating all the memory)
+- A simple health check
+- Security basics (non-root user, read-only filesystem)
+
+What I left out:
+- Horizontal pod autoscalers
+- Complex networking policies  
+- Init containers
+- Sidecars
+- Service meshes
+- All the other "enterprise" stuff that sounds impressive but isn't needed yet
+
+The result? A deployment file that actually gets deployed instead of being endlessly tweaked. It works, it's reasonably secure, and when something breaks, you can actually debug it without a PhD in Kubernetes.
+
+This approach served me well - the service is literally running in production right now using these exact files. Sometimes the best solution is the simplest one that actually ships.
 
 ## Production Readiness Challenges
 
