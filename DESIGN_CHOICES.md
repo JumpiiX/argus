@@ -201,7 +201,6 @@ Uniswap V4 is like a sophisticated calculator that stores prices in a weird form
 - Uniswap V4 is the first version to support native ETH directly (no wrapping needed!)
 - Previous versions required wrapping ETH → WETH, which costs extra gas
 - In our code, we use `Address::zero()` for native ETH instead of a WETH contract address
-- This saves users ~40,000 gas per trade (about $5-20 in fees!)
 
 **The Weird Storage Format:**
 - Uniswap stores the square root of the price multiplied by a huge number (2^96)
