@@ -55,6 +55,7 @@ pub fn create_rocket(state: ApiState) -> rocket::Rocket<rocket::Build> {
 }
 
 #[get("/health")]
+#[must_use]
 pub fn health_check() -> &'static str {
     "OK"
 }
