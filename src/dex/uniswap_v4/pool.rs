@@ -155,15 +155,15 @@ impl DexClient for UniswapV4Client {
         let spot_price = Decimal::try_from(spot_price_raw * 1e12).unwrap_or(Decimal::from(3000));
 
         let price_impact_percent = if amount_in > Decimal::ZERO {
-            (amount_in / Decimal::from(10)) * Decimal::from_str("0.001").unwrap()
+            -((amount_in / Decimal::from(10)) * Decimal::from_str("0.001").unwrap())
         } else {
             Decimal::ZERO
         };
 
         let effective_price = if zero_for_one {
-            spot_price * (Decimal::ONE - price_impact_percent)
-        } else {
             spot_price * (Decimal::ONE + price_impact_percent)
+        } else {
+            spot_price * (Decimal::ONE - price_impact_percent)
         };
 
         let amount_out = if zero_for_one {
