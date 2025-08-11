@@ -22,7 +22,7 @@ impl PoolKey {
         // Source: https://docs.uniswap.org/contracts/v4/overview
         // Pool initialized in tx: https://etherscan.io/tx/0x5205439b7e71dfe27d0911a0b05c0380e481ae83bed1ec7025513be0e3eaecb7
         // We use Address::zero() for native ETH instead of WETH contract address
-        let eth: Address = Address::zero(); // Native ETH (0x0000...)
+        let eth: Address = Address::zero();
         let usdc: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
             .parse()
             .unwrap();

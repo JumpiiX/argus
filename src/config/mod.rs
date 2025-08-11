@@ -64,13 +64,13 @@ impl Config {
                 rpc_url: env::var("ETHEREUM_RPC_URL")
                     .map_err(|_| ArgusError::ConfigError("ETHEREUM_RPC_URL not set".to_string()))?,
                 chain_id: 1,
-                gas_price_multiplier: 1.1, // Hardcoded 10% buffer
+                gas_price_multiplier: 1.1,
             },
             base: ChainConfig {
                 rpc_url: env::var("BASE_RPC_URL")
                     .map_err(|_| ArgusError::ConfigError("BASE_RPC_URL not set".to_string()))?,
                 chain_id: 8453,
-                gas_price_multiplier: 1.1, // Hardcoded 10% buffer
+                gas_price_multiplier: 1.1,
             },
             cex: CexConfig {
                 provider: env::var("CEX_PROVIDER")
@@ -79,7 +79,7 @@ impl Config {
                     .unwrap_or(CexProvider::Coinbase),
             },
             trading: TradingConfig {
-                default_trade_size_eth: "10".to_string(), // Hardcoded default
+                default_trade_size_eth: "10".to_string(),
             },
         })
     }
