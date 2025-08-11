@@ -1,5 +1,20 @@
 # Design Choices and Implementation Decisions
 
+## Code Quality and Standards
+
+### Linting and Code Style
+This project follows strict Rust industry standards for code quality:
+
+- **Linting**: We use [Clippy](https://github.com/rust-lang/rust-clippy) with the most strict settings possible:
+  ```bash
+  cargo clippy --all-targets --all-features --workspace -- -W clippy::pedantic -D warnings
+  ```
+  While this takes more time to get the code to compile initially, it ensures high code quality, catches potential bugs early, and enforces best practices. The pedantic level catches issues like missing documentation, suboptimal patterns, and potential performance problems.
+
+- **Formatting**: We use `rustfmt` to maintain consistent code formatting across the entire codebase, following the official Rust style guidelines.
+
+These choices ensure the code is maintainable, follows Rust best practices, and meets professional standards expected in production systems.
+
 ## TL;DR - What You Need to Know
 
 **What Argus Does:** Watches ETH/USDC prices on two exchanges (Uniswap V4 and Aerodrome) and tells you if there's profit after gas fees.
