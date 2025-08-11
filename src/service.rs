@@ -74,8 +74,8 @@ impl ArbitrageService {
         
         self.analyzer.lock().unwrap().update_eth_price(cex_price.price);
         
-        let uniswap_swap_calldata = self.build_uniswap_swap_calldata(trade_size_eth)?;
-        let aerodrome_swap_calldata = self.build_aerodrome_swap_calldata(trade_size_eth)?;
+        let uniswap_swap_calldata = self.build_uniswap_swap_calldata(trade_size_eth);
+        let aerodrome_swap_calldata = self.build_aerodrome_swap_calldata(trade_size_eth);
         
         let eth_gas_cost_usd = self.estimate_gas_usd_eth_swap(
             uniswap_swap_calldata.clone(),
@@ -126,22 +126,22 @@ impl ArbitrageService {
         self.aerodrome_client.calculate_swap_output(amount_eth, true).await
     }
     
-    fn build_uniswap_swap_calldata(&self, _trade_size_eth: Decimal) -> Result<Vec<u8>> {
+    fn build_uniswap_swap_calldata(&self, _trade_size_eth: Decimal) -> Vec<u8> {
         
         let mut calldata = Vec::new();
         calldata.extend_from_slice(&[0x12, 0x34, 0x56, 0x78]);
         calldata.extend_from_slice(&[0xAA; 200]);
         
-        Ok(calldata)
+        calldata
     }
     
-    fn build_aerodrome_swap_calldata(&self, _trade_size_eth: Decimal) -> Result<Vec<u8>> {
+    fn build_aerodrome_swap_calldata(&self, _trade_size_eth: Decimal) -> Vec<u8> {
         
         let mut calldata = Vec::new();
         calldata.extend_from_slice(&[0x87, 0x65, 0x43, 0x21]);
         calldata.extend_from_slice(&[0xBB; 180]);
         
-        Ok(calldata)
+        calldata
     }
     
     async fn estimate_gas_usd_eth_swap(&self, _calldata: Vec<u8>, eth_price_usd: Decimal) -> Result<Decimal> {

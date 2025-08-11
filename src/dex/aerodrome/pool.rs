@@ -127,14 +127,14 @@ impl AerodromeClient {
         
         let amount_in_with_fee = amount_in * 9999 / 10000;
         
-        let numerator = (amount_in_with_fee as u128) * (reserve_out as u128);
-        let denominator = (reserve_in as u128) + (amount_in_with_fee as u128);
+        let numerator = amount_in_with_fee * reserve_out;
+        let denominator = reserve_in + amount_in_with_fee;
         
         if denominator == 0 {
             return Err(ArgusError::CalculationError("Division by zero".to_string()));
         }
         
-        Ok((numerator / denominator) as u128)
+        Ok(numerator / denominator)
     }
 }
 
